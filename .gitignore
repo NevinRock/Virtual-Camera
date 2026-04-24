@@ -1,0 +1,92 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+
+# Python build
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# =========================
+# PyCharm / IDE
+# =========================
+.idea/
+*.iml
+
+# VS Code (optional)
+.vscode/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Node / React
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Misc
+# =========================
+*.sqlite3
+*.db
+
+# =========================
+# PyAutoGUI screenshots (optional)
+# =========================
+*.jpg
+*.jpeg
+
+# =========================
+# PyInstaller
+# =========================
+
+# PyInstaller build temp
+build/
+dist/
+
+# Spec file (can be regenerated)
+*.spec
+
+# PyInstaller cache
+__pyinstaller__/
+
+# Hook files / analysis cache (rare but safe to ignore)
+*.manifest
+*.toc
+*.pyz
+*.pkg
+
+# Executables (optional: ignore if you don't want to commit EXE)
+*.exe
+*.app
+*.dmg
