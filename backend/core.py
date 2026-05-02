@@ -27,6 +27,7 @@ class VirtualCamManager:
         self.lock = threading.Lock()
         self.device_name = ""
         self.output_fps = 30.0
+        self.preferred_device = "Unity Video Capture"
 
         self.playback_time_sec = 0.0
         self.video_duration_sec = 0.0
@@ -104,7 +105,7 @@ class VirtualCamManager:
             if paused is not None:
                 self.paused = paused
 
-    def start(self, width=1280, height=720, fps=30):
+    def start(self, width=1280, height=720, fps=30, device: str | None = None):
         if self.running:
             return True, "已运行"
 
@@ -112,13 +113,15 @@ class VirtualCamManager:
             self.image = np.zeros((height, width, 3), dtype=np.uint8)
 
         try:
+            target_device = (device or self.preferred_device or "").strip() or None
             self.cam = pyvirtualcam.Camera(
                 width=width,
                 height=height,
                 fps=fps,
-                device="Unity Video Capture"  # 👈 关键
+                device=target_device,
             )
             self.device_name = self.cam.device
+            self.preferred_device = self.device_name or (target_device or self.preferred_device)
             self.output_fps = float(fps)
             self.running = True
 

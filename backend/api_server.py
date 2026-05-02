@@ -45,6 +45,10 @@ class VideoPathPayload(BaseModel):
     path: str
 
 
+class StartPayload(BaseModel):
+    device: str | None = None
+
+
 # ================= 工具 =================
 
 def normalize_user_video_path(raw: str) -> str:
@@ -107,8 +111,8 @@ def status():
 
 
 @app.post("/api/start")
-def start():
-    ok, msg = cam.start()
+def start(p: StartPayload | None = None):
+    ok, msg = cam.start(device=(p.device if p else None))
     return {"ok": ok, "message": msg}
 
 

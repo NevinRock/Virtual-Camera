@@ -29,6 +29,8 @@ type Status = {
   paused: boolean;
 };
 
+const DEVICE_OPTIONS = ["Unity Video Capture", "OBS Virtual Camera"] as const;
+
 function formatTime(sec: number): string {
   if (!Number.isFinite(sec) || sec < 0) return "0:00";
   const s = Math.floor(sec % 60);
@@ -45,6 +47,9 @@ export default function App() {
   const [previewTime, setPreviewTime] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [dropOver, setDropOver] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<(typeof DEVICE_OPTIONS)[number]>(
+    "Unity Video Capture"
+  );
   const dragging = useRef(false);
   const hoverRaf = useRef<number>(0);
   const lastPreviewT = useRef(-1);
@@ -109,7 +114,11 @@ export default function App() {
         void refreshStatus();
         return;
       }
-      const res = await fetch(`${API}/api/start`, { method: "POST" });
+      const res = await fetch(`${API}/api/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ device: selectedDevice }),
+      });
       const data = (await res.json()) as { message?: string };
       setStatusText(data.message ?? "已响应");
       setStreamKey((k) => k + 1);
@@ -234,7 +243,7 @@ export default function App() {
           <span className="vc-logo" aria-hidden />
           <div>
             <h1 className="vc-title">Virtual Cam</h1>
-            <p className="vc-sub">与虚拟摄像头画面同步的预览与控制</p>
+            <p className="vc-sub">NB出品 必为精品</p>
           </div>
         </div>
         <div className={`vc-pill ${status?.running ? "vc-pill-on" : ""}`}>
@@ -360,6 +369,26 @@ export default function App() {
 
       <section className="vc-panel">
         <h2 className="vc-h2">设备</h2>
+        <div className="vc-device-row">
+          <label className="vc-device-label" htmlFor="vc-device-select">
+            虚拟摄像头驱动
+          </label>
+          <select
+            id="vc-device-select"
+            className="vc-select"
+            value={selectedDevice}
+            disabled={status?.running}
+            onChange={(e) =>
+              setSelectedDevice(e.target.value as (typeof DEVICE_OPTIONS)[number])
+            }
+          >
+            {DEVICE_OPTIONS.map((device) => (
+              <option key={device} value={device}>
+                {device}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="vc-actions">
           <button
             type="button"
